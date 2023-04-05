@@ -90,6 +90,16 @@ const moviesController = {
                     id: req.params.id
                     }
                 })
+                .then((response) => {
+                    if(response){
+                    return res.redirect("/movies/detail/" + req.params.id);
+                    } else {
+                     throw new Error("No se pudo actualizar el registro");
+                    }
+                })
+                .catch(error => console.log(error));
+            
+
             } else {
                 Movie.findByPk(req.params.id)
             .then(Movie => {
@@ -103,7 +113,8 @@ const moviesController = {
         Movie.findByPk(req.params.id)
             .then(Movie => {
                 res.render('moviesDelete.ejs', {Movie});
-            });
+            })
+            .catch(error => console.log(error));
     },
     destroy: function (req, res) {
         Movie.destroy({
@@ -111,7 +122,14 @@ const moviesController = {
                 id: req.params.id
             }
         })
-        res.redirect('/movies');
+        .then((response) => {
+            if(response){
+            return res.redirect("/movies");
+            } else {
+                throw new Error("No se pudo eliminar el registro");
+            }
+        })
+        .catch(error => console.log(error));
     }
 
 }
